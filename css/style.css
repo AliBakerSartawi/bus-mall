@@ -4,33 +4,61 @@
   box-sizing: border-box;
 }
 
-#results {
-  float: left;
-  width: 25vw;
+body {
+  font-family: 'Courier New', Courier, monospace;
 }
 
-#images {
-  float: left;
-  width: 50vw;
+#test {
+  background-color: black;
+  width: 100%;
+  height: 70vh;
 }
 
-#images img {
+#results-list {
+  float: left;
+  width: 40%;
+  background-color: black;
+  color: whitesmoke;
+  font-size: larger;
+  padding: 30px;
+}
+
+#results-list ul li {
+  padding-bottom: 10px;
+}
+
+#images-section {
+  float: left;
+  width: 60%;
+  background-color: black;
+  padding: 30px;
+
+}
+
+#images-section img {
   float: left;
   width: 33.33%;
-  border: solid;
-}
-/* 
-#left-image {
-  float: left;
-  width: 33.33%;
+  border: solid 5px;
 }
 
-#mid-image {
-  float: left;
-  width: 33.33%
+#results-button {
+  clear: both;
+  text-align: center;
+  padding-top: 30px;
 }
 
-#right-image {
-  float: left;
-  width: 33.33%;
-} */
+#results-button button {
+  border: solid black 5px;
+  background-color: black;
+  color: whitesmoke;
+  font-weight: bold;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: larger;
+  padding: 10px 20px 10px 20px;
+}
+
+#results-button button:hover {
+  background-color: whitesmoke;
+  color: black;
+  transition: 300ms ease-in-out;
+}
