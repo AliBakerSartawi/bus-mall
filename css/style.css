@@ -1,0 +1,36 @@
+
+
+* {
+  box-sizing: border-box;
+}
+
+#results {
+  float: left;
+  width: 25vw;
+}
+
+#images {
+  float: left;
+  width: 50vw;
+}
+
+#images img {
+  float: left;
+  width: 33.33%;
+  border: solid;
+}
+/* 
+#left-image {
+  float: left;
+  width: 33.33%;
+}
+
+#mid-image {
+  float: left;
+  width: 33.33%
+}
+
+#right-image {
+  float: left;
+  width: 33.33%;
+} */
