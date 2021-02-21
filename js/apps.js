@@ -66,7 +66,7 @@ const buttonSection = document.getElementById('results-button');
 
 function RandomImage(name, ext) {
   this.name = name;
-  this.path = `../img/${name}.${ext}`;
+  this.path = `.././img/${name}.${ext}`;
   this.votes = 0;
   this.views = 0;
   RandomImage.all.push(this);
