@@ -80,17 +80,29 @@ for (let i = 0; i < names.length; i++) {
 
 console.table(RandomImage.all);
 
+
+//image randomizor
+let leftPrevious = -1;
+let midPrevious = -2;
+let rightPrevious = -3;
 function render () {
   let leftIndex = randomNumber(0, names.length -1);
+  while (leftIndex === leftPrevious || leftIndex === midPrevious || leftIndex === rightPrevious) {
+    leftIndex = randomNumber(0, names.length -1);
+    if(leftIndex !== leftPrevious && leftIndex !== midPrevious && leftIndex !== rightPrevious){
+      break;
+    }
+  }
+  // console.log(leftIndex);
   leftImage.src = RandomImage.all[leftIndex].path;
   leftImage.title = RandomImage.all[leftIndex].name;
   leftImage.alt = RandomImage.all[leftIndex].name;
   RandomImage.all[leftIndex].views++;
 
-  let midIndex = leftIndex;
-  while (midIndex === leftIndex) {
+  let midIndex = randomNumber(0, names.length -1);
+  while (midIndex === leftPrevious || midIndex === midPrevious || midIndex === rightPrevious || midIndex === leftIndex) {
     midIndex = randomNumber(0, names.length -1);
-    if(midIndex !== leftIndex) {
+    if(midIndex !== leftPrevious && midIndex !== midPrevious && midIndex !== rightPrevious && midIndex !== leftIndex) {
       break;
     }
   }
@@ -99,12 +111,10 @@ function render () {
   midImage.alt = RandomImage.all[midIndex].name;
   RandomImage.all[midIndex].views++;
 
-  let rightIndex;
-  while (midIndex !== leftIndex) {
+  let rightIndex = randomNumber(0, names.length -1);
+  while (rightIndex === leftPrevious || rightIndex === midPrevious || rightIndex === rightPrevious || rightIndex === leftIndex || rightIndex === midIndex) {
     rightIndex = randomNumber(0, names.length -1);
-    if(rightIndex === leftIndex || rightIndex === midIndex){
-      rightIndex = randomNumber(0, names.length -1);
-    } else {
+    if(rightIndex !== leftPrevious && rightIndex !== midPrevious && rightIndex !== rightPrevious && rightIndex !== leftIndex && rightIndex !== midIndex){
       break;
     }
   }
@@ -113,15 +123,22 @@ function render () {
   rightImage.alt = RandomImage.all[rightIndex].name;
   RandomImage.all[rightIndex].views++;
 
-  console.table(RandomImage.all);
+  leftPrevious = leftIndex;
+  midPrevious = midIndex;
+  rightPrevious = rightIndex;
+  // console.table(RandomImage.all);
+  console.log('current', leftIndex, midIndex, rightIndex);
+  // console.log('mid', midIndex);
+  // console.log('right', rightIndex);
 }
-
 render();
 
+
+//image click event
 imagesSection.addEventListener('click', handleClick);
 
 function handleClick(event) {
-  console.log('target', event.target.id);
+  // console.log('target', event.target.id);
 
   if(event.target.id !== 'images-section'){
     for (let i = 0; i < RandomImage.all.length; i++) {
@@ -131,7 +148,7 @@ function handleClick(event) {
     }
     render();
     counter = counter + 1;
-    console.log(counter);
+    // console.log(counter);
     if(counter === rounds){
       imagesSection.removeEventListener('click', handleClick);
       
@@ -144,8 +161,10 @@ function handleClick(event) {
   }
 }
 
+
+//button function
 function handleButton(event) {
-  console.log(event.target.id);
+  // console.log(event.target.id);
   buttonSection.removeEventListener('click', handleButton);
   
   const listSection = document.getElementById('results-list');
@@ -157,4 +176,49 @@ function handleButton(event) {
     ulSection.appendChild(liEl);
     liEl.textContent = `${RandomImage.all[i].name.toUpperCase()} had ${RandomImage.all[i].votes} votes and was seen ${RandomImage.all[i].views} times.`;
   }
+  createChart();
+}
+
+
+// the chart function
+function createChart() {
+  const ctx = document.getElementById('resultChart').getContext('2d');
+
+  const imageVotes = [];
+  const imageViews = [];
+
+  for (let i = 0; i < RandomImage.all.length; i++) {
+    imageVotes.push(RandomImage.all[i].votes);
+    imageViews.push(RandomImage.all[i].views);
+  }
+  const chart = new Chart(ctx, {
+    // The type of chart we want to create
+    type: 'bar',
+
+    // The data for our dataset
+    data: {
+      labels: names,
+      datasets: [{
+        label: '# of votes',
+        backgroundColor: 'aquamarine',
+        borderColor: 'aquamarine',
+        // barPercentage: 0.5,
+        // barThickness: 2,
+        data: imageVotes,
+      },
+      {
+        label: '# of views',
+        backgroundColor: 'salmon',
+        borderColor: 'salmon',
+        // barPercentage: 0.5,
+        // barThickness: 2,
+        data: imageViews,
+      }]
+    },
+
+    // Configuration options go here
+    options: {
+      responsive: false
+    }
+  });
 }
