@@ -68,12 +68,21 @@ header h1 {
   font-family: 'Courier New', Courier, monospace;
   font-size: larger;
   padding: 10px 20px 10px 20px;
+  transition: 300ms ease-in-out;
 }
 
 #results-button button:hover {
   background-color: whitesmoke;
   color: black;
   transition: 300ms ease-in-out;
+}
+
+#resultChart {
+  display: block;
+  background-color: black;
+  margin: 30px auto 0px auto;
+  width: 75%;
+  height: 50%;
 }
 
 footer {
