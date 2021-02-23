@@ -13,9 +13,9 @@ function getExt(filename) {
 }
 
 //name extractor
-function noExt(name){
-  names.push(name.split('.').slice(0, -1).join('.'));
-}
+// function noExt(name){
+//   names.push(name.split('.').slice(0, -1).join('.'));
+// }
 
 const namesFull = [
   'bag.jpg',
@@ -170,27 +170,42 @@ function handleButton(event) {
   const listSection = document.getElementById('results-list');
   const ulSection = document.createElement('ul');
   listSection.appendChild(ulSection);
-
+  
+  createChart();
   for (let i = 0; i < RandomImage.all.length; i++) {
     const liEl = document.createElement('li');
     ulSection.appendChild(liEl);
-    liEl.textContent = `${RandomImage.all[i].name.toUpperCase()} had ${RandomImage.all[i].votes} votes and was seen ${RandomImage.all[i].views} times.`;
+    // liEl.textContent = `${RandomImage.all[i].name.toUpperCase()} had ${RandomImage.all[i].votes} votes and was seen ${RandomImage.all[i].views} times.`;
+    liEl.textContent = `${RandomImage.all[i].name.toUpperCase()} had ${imageVotes[i]} votes and was seen ${imageViews[i]} times.`;
+
   }
-  createChart();
+  localStorage.removeItem('votes');
+  localStorage.removeItem('views');
+  localStorage.setItem('votes', JSON.stringify(imageVotes));
+  localStorage.setItem('views', JSON.stringify(imageViews));
 }
 
 
 // the chart function
+const imageVotes = [];
+const imageViews = [];
+if(imageViews.length < 1) {
+  for (let i = 0; i < RandomImage.all.length; i++) {
+    imageVotes.push(0);
+    imageViews.push(0);
+  }
+}
+
 function createChart() {
   const ctx = document.getElementById('resultChart').getContext('2d');
-
-  const imageVotes = [];
-  const imageViews = [];
-
+  
   for (let i = 0; i < RandomImage.all.length; i++) {
-    imageVotes.push(RandomImage.all[i].votes);
-    imageViews.push(RandomImage.all[i].views);
+    // imageVotes.push(RandomImage.all[i].votes);
+    // imageViews.push(RandomImage.all[i].views);
+    imageVotes[i] += RandomImage.all[i].votes;
+    imageViews[i] += RandomImage.all[i].views;
   }
+
   const chart = new Chart(ctx, {
     // The type of chart we want to create
     type: 'bar',
@@ -222,3 +237,26 @@ function createChart() {
     }
   });
 }
+
+//localStorage retrieve 
+function retrieve(){
+  localStorage.removeItem('randid');
+  console.log(localStorage);
+  
+  if(localStorage.length > 0) {
+    const oldVotes = JSON.parse(localStorage.getItem('votes'));
+    const oldViews = JSON.parse(localStorage.getItem('views'));
+    
+    for (let i = 0; i < imageVotes.length; i++) {
+      imageVotes[i] += oldVotes[i];
+      imageViews[i] += oldViews[i];
+    }
+    // imageVotes.push(oldVotes);
+    // imageViews.push(oldViews);
+    console.log('old votes', oldVotes);
+    console.log('old views', oldViews);
+  }
+  console.log('total votes', imageVotes);
+  console.log('total views', imageViews);
+}
+retrieve();
